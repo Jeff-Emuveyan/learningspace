@@ -18,7 +18,6 @@ open class UserRepository @Inject constructor(private val service: Service, priv
         }
     }
 
-
     open suspend fun getUserFromRemoteSource(userID: String): UserDto?{
         return try {
             val response = service.fetchUser(userID) ?: return null

@@ -1,5 +1,8 @@
 package com.seamfix.core.model.response
 
+import com.seamfix.core.model.table.Location
+import com.seamfix.core.model.table.User
+
 
 class UserDto(var id: String,
            var title: String? = null,
@@ -10,10 +13,16 @@ class UserDto(var id: String,
            var dateOfBirth: String? = null,
            var registerDate: String? = null,
            var picture: String? = null,
-           var location: Location? = null)
+           var location: LocationDto? = null){
 
 
-class Location( var street: String? = null,
+    fun toEntity(): User {
+        return User(id, title, firstName, lastName, gender, email, dateOfBirth, registerDate, picture, location?.toEntity())
+    }
+}
+
+
+class LocationDto( var street: String? = null,
                 var city: String? = null,
                 var state: String? = null,
                 var country: String? = null,
@@ -21,5 +30,9 @@ class Location( var street: String? = null,
 
     override fun toString(): String {
         return "Street: $street, city: $city, state: $state, country: $country, timezone: $timezone."
+    }
+
+    fun toEntity(): Location{
+        return Location(street, city, state, country, timezone)
     }
 }
