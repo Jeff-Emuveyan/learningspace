@@ -1,10 +1,7 @@
-package com.seamfix.common.model.table
+package com.seamfix.core.model.response
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 
-@Entity(tableName = "user")
-class User(@PrimaryKey var id: String,
+class UserDto(var id: String,
            var title: String? = null,
            var firstName: String? = null,
            var lastName: String? = null,
@@ -13,14 +10,8 @@ class User(@PrimaryKey var id: String,
            var dateOfBirth: String? = null,
            var registerDate: String? = null,
            var picture: String? = null,
-           var location: Location? = null){
+           var location: Location? = null)
 
-    /*** Returns true only when no member field is null */
-    fun isUserInformationComplete(): Boolean {
-        return !(title == null || firstName == null || lastName == null || gender == null ||  email == null
-                ||  dateOfBirth == null || registerDate == null || picture == null || location == null)
-    }
-}
 
 class Location( var street: String? = null,
                 var city: String? = null,
