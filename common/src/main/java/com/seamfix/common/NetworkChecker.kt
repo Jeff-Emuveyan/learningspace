@@ -27,7 +27,6 @@ class NetworkChecker @Inject constructor (@ApplicationContext var context: Conte
             }else{
                canConnect.postValue(false)
             }
-            Log.d(NetworkChecker::class.simpleName,"Checking network health...")
             delay(5_000)
         }
     }
