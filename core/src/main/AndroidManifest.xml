@@ -1,11 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.seamfix.core">
-
-    <application
-        android:allowBackup="true"
-        android:name="com.seamfix.core.MainApplication"
-        android:usesCleartextTraffic="true">
-    </application>
-
 </manifest>
