@@ -6,6 +6,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.components.SingletonComponent
 import retrofit2.Response
 import retrofit2.Retrofit
 import javax.inject.Inject
@@ -23,7 +24,7 @@ class ServiceImpl @Inject constructor(var retrofit: Retrofit): Service {
 }
 
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(SingletonComponent::class)
 abstract class SServiceModule {
     @Binds
     abstract fun bindService(serviceImpl: ServiceImpl): Service
