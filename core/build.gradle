@@ -99,10 +99,10 @@ dependencies {
     testImplementation 'androidx.test.ext:junit:1.1.2'
 
     //Room
-    implementation("androidx.room:room-runtime:$rootProject.roomVersion") {
+    api("androidx.room:room-runtime:$rootProject.roomVersion") {
         exclude group: 'com.google.code.gson'
     }
-    implementation("androidx.room:room-ktx:$rootProject.roomVersion") {
+    api("androidx.room:room-ktx:$rootProject.roomVersion") {
         exclude group: 'com.google.code.gson'
     }
     kapt "androidx.room:room-compiler:$rootProject.roomVersion"
