@@ -55,7 +55,7 @@ class UserDetailBottomSheet(var user: User) : BottomSheetDialogFragment() {
 
         //set a listener to listen for network changes:
         viewModel.listenForNetworkChanges()
-        NetworkChecker.canConnect.observe(viewLifecycleOwner, Observer {
+        viewModel.networkChecker.canConnect.observe(viewLifecycleOwner, Observer {
             if(it){
                 setUpUIState(UIState.NETWORK_CONNECTION_AVAILABLE)
             }else{

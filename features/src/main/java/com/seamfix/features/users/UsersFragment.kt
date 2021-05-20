@@ -46,7 +46,7 @@ class UsersFragment : Fragment() {
 
         //set a listener to listen for network changes:
         viewModel.listenForNetworkChanges()
-        NetworkChecker.canConnect.observe(viewLifecycleOwner, Observer {
+        viewModel.networkChecker.canConnect.observe(viewLifecycleOwner, Observer {
             if(it){
                 setUpUI(UIState.NETWORK_CONNECTION_AVAILABLE)
             }else{

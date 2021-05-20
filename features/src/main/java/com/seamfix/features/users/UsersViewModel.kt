@@ -31,7 +31,7 @@ open class UsersViewModel @Inject constructor(var userRepository: UserRepository
     }
 
 
-    private suspend fun saveUsers(users: List<User>){
+    open suspend fun saveUsers(users: List<User>){
         for(user in users){
             userRepository.save(user)
         }

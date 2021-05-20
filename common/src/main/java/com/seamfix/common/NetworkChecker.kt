@@ -10,14 +10,11 @@ import javax.inject.Inject
 
 /*** A class that helps check the network status of the device ***/
 
-class NetworkChecker @Inject constructor (@ApplicationContext var context: Context) {
-
+open class NetworkChecker @Inject constructor (@ApplicationContext var context: Context) {
 
     // this live data will be true if the app can connect to a  network
-    companion object{
-        val canConnect =  MutableLiveData<Boolean>().apply {
-            value = false
-        }
+    val canConnect =  MutableLiveData<Boolean>().apply {
+        value = false
     }
 
     suspend fun listenForNetworkChanges() {
