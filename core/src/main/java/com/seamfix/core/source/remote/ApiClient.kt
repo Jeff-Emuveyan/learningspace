@@ -1,6 +1,5 @@
 package com.seamfix.core.source.remote
 import android.content.Context
-import com.seamfix.core.MainApplication
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -29,10 +28,9 @@ object ApiClient {
         }
 
         val  client = httpClient.build()
-        val application = appContext.applicationContext as MainApplication
 
         return Retrofit.Builder()
-            .baseUrl(application.baseUrl)
+            .baseUrl("https://dummyapi.io")
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
