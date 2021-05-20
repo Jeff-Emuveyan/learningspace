@@ -11,10 +11,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class UserDetailViewModel @Inject constructor(var userRepository: UserRepository,
+open class UserDetailViewModel @Inject constructor(var userRepository: UserRepository,
                                               var networkChecker: NetworkChecker) : ViewModel() {
 
-    suspend fun getUser(userID: String): User? {
+    open suspend fun getUser(userID: String): User? {
         //get user from remote database:
         var user = userRepository.getUserFromRemoteSource(userID)?.toEntity()
         if(user != null){
