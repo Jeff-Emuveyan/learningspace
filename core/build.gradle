@@ -7,12 +7,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "29.0.3"
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
 
@@ -111,4 +111,8 @@ dependencies {
     api 'com.facebook.shimmer:shimmer:0.5.0'
 
     api 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
+    //Lifecycle scope
+    api "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
+    api 'androidx.fragment:fragment-ktx:1.4.0'
 }

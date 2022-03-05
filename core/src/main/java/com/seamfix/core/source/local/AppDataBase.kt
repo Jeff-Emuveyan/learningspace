@@ -5,12 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.seamfix.core.model.table.User
+import com.seamfix.core.model.table.UserEntity
 import com.seamfix.core.source.local.dao.UserDao
 
-@Database(entities = [User::class], version = 1, exportSchema = true)
+@Database(entities = [UserEntity::class], version = 1, exportSchema = true)
 
-@TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao

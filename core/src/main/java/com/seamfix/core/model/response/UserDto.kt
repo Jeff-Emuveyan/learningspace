@@ -32,7 +32,7 @@ class LocationDto( var street: String? = null,
         return "Street: $street, city: $city, state: $state, country: $country, timezone: $timezone."
     }
 
-    fun toEntity(): Location{
+    fun toEntity(): Location {
         return Location(street, city, state, country, timezone)
     }
 }

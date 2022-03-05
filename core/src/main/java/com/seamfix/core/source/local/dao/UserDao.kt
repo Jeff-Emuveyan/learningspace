@@ -4,22 +4,17 @@ import androidx.annotation.Keep
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.Update
-import com.seamfix.core.model.table.User
+import com.seamfix.core.model.table.UserEntity
+import kotlinx.coroutines.flow.Flow
 
 @Keep
 @Dao
 interface UserDao {
 
     @Insert
-    suspend fun saveUser(user: User)
-
-    @Query("SELECT * FROM user WHERE id = :id")
-    suspend fun getUserByID(id: String): User?
+    suspend fun saveUser(user: UserEntity)
 
     @Query("SELECT * FROM user")
-    suspend fun getAllUsers(): List<User>?
+    fun getAllUsers(): Flow<List<UserEntity>>
 
-    @Update
-    suspend fun updateUser(user: User)
 }

@@ -1,4 +1,5 @@
 package com.seamfix.core.source.local
+/*
 
 import androidx.annotation.Keep
 import androidx.room.TypeConverter
@@ -22,4 +23,4 @@ class Converters {
         val gSon = Gson()
         return gSon.fromJson(string, Location::class.java)
     }
-}
+}*/
