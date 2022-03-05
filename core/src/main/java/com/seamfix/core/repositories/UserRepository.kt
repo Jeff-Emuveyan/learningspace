@@ -27,5 +27,5 @@ open class UserRepository @Inject constructor(private val ioDispatcher: Coroutin
             val random = Math.random()
             emit(UserEntity(firstName = "Jeff--${random}"))
         }
-    }.flowOn(Dispatchers.IO) // We use this since our fragment is using Dispatchers.MAIN
+    }.flowOn(ioDispatcher) // We use this since our fragment is using Dispatchers.MAIN
 }
