@@ -55,6 +55,7 @@ class UsersFragment : Fragment() {
         Log.e("UsersFragment", "This code won't be blocked")
 
         fetchEmployees()
+        fetchGifts()
         observeFlow()
     }
 
@@ -103,7 +104,9 @@ class UsersFragment : Fragment() {
      * emit until the value to be emitted changes to something like this for example:
      * emit(EmployeeResponse(name = "Jerry", salary = 6600L)).
      *
-     * State flow is used to collecting UIState related objects
+     * State flow is used to collecting UIState related objects. It also has the ability to survive
+     * device rotation/configuration changes:
+     * https://www.youtube.com/watch?v=fSB6_KE95bU
      * **/
     private fun fetchEmployees() {
         viewModel.employee.onEach {
@@ -112,6 +115,28 @@ class UsersFragment : Fragment() {
         }.flowWithLifecycle(lifecycle).launchIn(lifecycleScope)
 
         viewModel.fetchEmployees()
+    }
+
+
+    /***
+     * Shared flow:
+     * https://myungpyo.medium.com/stateflow-and-sharedflow-33603d83aff9
+     *
+     * A Shared flow is used for collecting events.
+     * A difference between Shared flow and State is that Shared flow can emit duplicate data consecutively.
+     * This means that Shared flow can still do the work of a State flow.
+     *
+     * In the example below, we are collecting a Shared flow of Gifts. Notice that even doe the
+     * UserRepository literally emitting the exact same Gift(), our flow block below still emits the Gift()
+     * and records the log. This will not be the case if we used StateFlow.
+     */
+    private fun fetchGifts() {
+        viewModel.gift.onEach {
+            Log.e("UsersFragment", "Event emitting...")
+            binding.tvLatestGift.text = it?.name ?: "NULL VALUE"
+        }.flowWithLifecycle(lifecycle).launchIn(lifecycleScope)
+
+        viewModel.fetchGifts()
     }
 
     private fun saveUser() {
