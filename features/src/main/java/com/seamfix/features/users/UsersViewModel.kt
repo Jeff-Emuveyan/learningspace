@@ -2,26 +2,30 @@ package com.seamfix.features.users
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.seamfix.core.model.response.EmployeeResponse
 import com.seamfix.core.model.table.UserEntity
 import com.seamfix.core.repositories.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-open class UsersViewModel @Inject constructor(var userRepository: UserRepository) : ViewModel() {
+open class UsersViewModel @Inject constructor(private var employeeRepository: UserRepository) : ViewModel() {
 
-    private val _users = MutableStateFlow(emptyList<UserEntity>())
-    val users = _users.asStateFlow()
+    private val _employee = MutableStateFlow<EmployeeResponse?>(null)
+    val employee = _employee.asStateFlow()
 
-    fun save(userEntity: UserEntity) = viewModelScope.launch {
-        userRepository.saveUser(userEntity)
+    fun save(employeeEntity: UserEntity) = viewModelScope.launch {
+        employeeRepository.saveUser(employeeEntity)
     }
 
-    fun getUserFormLocal() = userRepository.getUsersFromLocal()
+    fun getUserFormLocal() = employeeRepository.getUsersFromLocal()
 
-    fun getFromRemote() = userRepository.getUserFromRemote()
+    fun getFromRemote() = employeeRepository.getUserFromRemote()
+
+    fun fetchEmployees()  = employeeRepository.getEmployeeFromRemote().onEach {
+        _employee.value = it
+    }.launchIn(viewModelScope)
 
 }
