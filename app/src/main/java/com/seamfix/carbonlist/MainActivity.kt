@@ -1,11 +1,9 @@
 package com.seamfix.carbonlist
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import com.seamfix.features.users.UsersFragment
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -19,12 +17,5 @@ class MainActivity : AppCompatActivity() {
 
         //remove action bar:
         actionBar?.hide()
-
-        //Add the users feature:
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, UsersFragment.newInstance())
-                .commitNow()
-        }
     }
 }
