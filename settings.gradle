@@ -3,3 +3,4 @@ include ':features'
 include ':core'
 include ':app'
 rootProject.name = "CarbonList"
+include ':uitests'
