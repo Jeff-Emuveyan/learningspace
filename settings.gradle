@@ -4,3 +4,5 @@ include ':app'
 rootProject.name = "CarbonList"
 include ':uitests'
 include ':flows'
+include ':dagger'
+include ':dagger_dependency'
