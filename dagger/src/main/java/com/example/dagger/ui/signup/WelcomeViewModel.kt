@@ -1,7 +1,7 @@
-package com.example.dagger.login
+package com.example.dagger.ui.signup
 
 import androidx.lifecycle.ViewModel
 
-class LoginViewModel : ViewModel() {
+class WelcomeViewModel : ViewModel() {
     // TODO: Implement the ViewModel
 }

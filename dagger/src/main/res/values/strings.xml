@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">dagger</string>
     <string name="start">Start</string>
+    <string name="enter_your_age">Enter your age</string>
+    <string name="enter_your_first_name">Enter your first name</string>
+    <string name="sign_up">Sign up</string>
+    <string name="proceed">Proceed</string>
 </resources>
