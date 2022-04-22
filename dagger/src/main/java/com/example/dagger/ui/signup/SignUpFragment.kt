@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
+import com.example.dagger.R
 import com.example.dagger.databinding.FragmentLoginBinding
 
 class SignUpFragment : Fragment() {
@@ -49,7 +51,7 @@ class SignUpFragment : Fragment() {
     private fun sighUpUser(name: String, age: Int) {
         viewModel.sighUpUser(name, age)
         // We are using 'un-safe args' just to be fast. In Production code, use safe-args.
-       // findNavController().navigate(R.id.action_loginFragment_to_welcomeFragment)
+        findNavController().navigate(R.id.action_loginFragment_to_welcomeFragment)
 
     }
 }

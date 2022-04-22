@@ -8,18 +8,11 @@ import com.seamfix.core.repositories.UserRepository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-/*class SignUpViewModel @Inject constructor(val idGenerator: IDGenerator,
+class SignUpViewModel @Inject constructor(val idGenerator: IDGenerator,
                                           val userRepository: UserRepository) : ViewModel() {
 
     fun sighUpUser(name: String, age: Int) = viewModelScope.launch {
         val user = UserEntity(idGenerator.getId!!, name, age)
         userRepository.saveUser(user)
-    }
-}*/
-
-class SignUpViewModel @Inject constructor() : ViewModel() {
-
-    fun sighUpUser(name: String, age: Int) = viewModelScope.launch {
-
     }
 }

@@ -1,5 +1,7 @@
 package com.example.dagger.dagger
 
-interface ApplicationComponent {
+import dagger.Component
 
+@Component
+interface ApplicationComponent {
 }

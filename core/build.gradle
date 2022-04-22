@@ -68,11 +68,10 @@ dependencies {
     // Coroutines
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1"
 
-    //hilt
-    api "com.google.dagger:hilt-android:2.33-beta"
+    // hilt
+    implementation "com.google.dagger:hilt-android:2.38.1"
+    kapt "com.google.dagger:hilt-compiler:2.38.1"
     api 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03'
-    kapt 'androidx.hilt:hilt-compiler:1.0.0-beta01'
-    kapt "com.google.dagger:hilt-android-compiler:2.31.2-alpha"
 
     api 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     api 'androidx.fragment:fragment-ktx:1.3.4'
@@ -82,18 +81,6 @@ dependencies {
     api 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0'
     api 'androidx.test.ext:junit:1.1.2'
 
-    //MockWebSever
-    androidTestImplementation "com.squareup.okhttp3:mockwebserver:4.6.0"
-    androidTestImplementation 'com.jakewharton.espresso:okhttp3-idling-resource:1.0.0'
-
-    // Testing-only dependencies
-    androidTestImplementation 'androidx.test:core:' + rootProject.coreVersion
-    androidTestImplementation 'androidx.test:core-ktx:' + rootProject.coreVersion
-    androidTestImplementation 'androidx.test.ext:junit:' + rootProject.extJUnitVersion
-    androidTestImplementation 'androidx.test.ext:junit-ktx:' + rootProject.extJUnitVersion
-    androidTestImplementation 'androidx.test:runner:' + rootProject.runnerVersion
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    testImplementation 'androidx.test.ext:junit:1.1.2'
 
     //Room
     api("androidx.room:room-runtime:$rootProject.roomVersion") {
@@ -115,4 +102,12 @@ dependencies {
     //Lifecycle scope
     api "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
     api 'androidx.fragment:fragment-ktx:1.4.0'
+
+    // dagger
+    api 'com.google.dagger:dagger:2.35.1'
+    kapt 'com.google.dagger:dagger-compiler:2.31.2'
+
+    // navigation
+    api 'androidx.navigation:navigation-fragment-ktx:2.4.2'
+    api 'androidx.navigation:navigation-ui-ktx:2.4.2'
 }
