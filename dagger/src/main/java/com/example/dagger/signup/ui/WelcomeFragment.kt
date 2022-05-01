@@ -1,4 +1,4 @@
-package com.example.dagger.ui.signup
+package com.example.dagger.signup.ui
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle

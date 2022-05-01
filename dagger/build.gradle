@@ -49,10 +49,9 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation project(path: ':dagger_dependency')
-    implementation project(path: ':core')
+    implementation project(path: ':dagger_core')
 
-    // hilt
-    implementation "com.google.dagger:hilt-android:2.38.1"
-    kapt "com.google.dagger:hilt-compiler:2.38.1"
-    api 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03'
+    // dagger
+    api 'com.google.dagger:dagger:2.38.1'
+    kapt 'com.google.dagger:dagger-compiler:2.38.1'
 }

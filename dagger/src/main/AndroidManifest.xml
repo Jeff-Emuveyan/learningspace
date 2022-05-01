@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CarbonList">
         <activity
-            android:name=".ui.signup.SignUpActivity"
+            android:name=".signup.ui.SignUpActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

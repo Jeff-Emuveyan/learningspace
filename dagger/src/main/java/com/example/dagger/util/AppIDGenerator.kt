@@ -1,8 +1,9 @@
 package com.example.dagger.util
 
 import java.security.SecureRandom
+import javax.inject.Inject
 
-class IDGenerator() {
+class AppIDGenerator @Inject constructor() {
 
     var getId: Int? = null
 

@@ -4,7 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.dagger.databinding.ActivityMainBinding
-import com.example.dagger.ui.signup.SignUpActivity
+import com.example.dagger.signup.ui.SignUpActivity
 
 class MainActivity : AppCompatActivity() {
 
