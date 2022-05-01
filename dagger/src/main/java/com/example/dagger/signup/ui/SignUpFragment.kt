@@ -48,7 +48,7 @@ class SignUpFragment : Fragment() {
 
     private fun setUpUI() = with(binding) {
         tvAssignedAppId.text = "Application ID is: ${viewModel.getApplicationId().toString()}"
-        tvAssignedUserId.text = "User ID is: ${viewModel.getUserId().toString()}"
+        tvAssignedUserId.text = "Login session ID is: ${viewModel.getSessionId().toString()}"
         button.setOnClickListener {
             validateAndSignUpUser()
         }
