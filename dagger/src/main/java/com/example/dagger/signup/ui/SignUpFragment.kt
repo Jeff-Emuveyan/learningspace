@@ -14,6 +14,7 @@ import com.example.dagger.R
 import com.example.dagger.databinding.FragmentLoginBinding
 import javax.inject.Inject
 
+//https://github.com/android/architecture-samples/tree/main/app/src/main/java/com/example/android/architecture/blueprints/todoapp
 class SignUpFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
