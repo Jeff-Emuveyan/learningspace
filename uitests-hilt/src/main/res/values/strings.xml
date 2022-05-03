@@ -1,0 +1,14 @@
+<resources>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cities_of_the_world">Cities of the world</string>
+    <string name="msg_the_end">No more results</string>
+    <string name="msg_network_error">Network error. Tap here to try again</string>
+    <string name="msg_loading">Loading…</string>
+    <string name="search">Search</string>
+    <string name="switch_to_map_view"><u>Click on an item to switch to map view</u></string>
+    <string name="no_location_found">Unable to get the location of this city</string>
+    <string name="no_location_found_error">No location found for this particular city</string>
+    <string name="msg_location">Country: %1$s, City: %2$s</string>
+    <string name="app_name">uitests_hilt</string>
+</resources>
