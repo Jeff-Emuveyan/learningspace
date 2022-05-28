@@ -39,6 +39,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.Before
 import org.junit.Rule
+import javax.inject.Inject
 
 /***
  * I used mockk instead of mockito-android because mockito-android threw errors when I tried to mock
@@ -55,37 +56,61 @@ import org.junit.Rule
 @RunWith(AndroidJUnit4::class)
 class ListOfCitiesFragmentInstrumentedTest {
 
-    val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-    private val repository: CityRepository = mockk()
-
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
+    val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+    @Inject // This tells hilt to give us a real production instance of a repository
+    lateinit var injectedRepository: CityRepository
+
+    private lateinit var repository: CityRepository // We created this field because we want to spy
+    // the injectedRepository
+
+    /**
+     * Most times, when launching a fragment for test, it is good to mock the viewModel.
+     * Below are several styles of mocking the viewModel.
+     *
+     * Refer to this link: https://developer.android.com/training/dependency-injection/hilt-testing#inject-in-tests
+     */
+
     /*
-        If you just want to completely mock the viewModel itself:
+        If you just want to completely mock the viewModel itself do:
         @BindValue @JvmField
         val viewModel:ListOfCitiesViewModel = mockk<ListOfCitiesViewModel>(relaxed = true)
+
+        Where the @BindValue tells hilt to replace the production instance with the one we
+        provided here.
     */
 
     /*
         If you just want to mock the dependencies of the viewModel (eg repository) and you
-        also want to mock the viewModel too:
+        also want to mock the viewModel too, do:
         @BindValue @JvmField
         val viewModel:ListOfCitiesViewModel = spyk(ListOfCitiesViewModel(repository))
-        (Where the 'repository' is a mocked object)
+        (Where the 'repository' is a mocked object ie repository: CityRepository = mockk())
     */
 
     /*
-        If you want the viewModel to NOT be mocked by want it's dependencies to be mocked (eg repository)
-        (Where the 'repository' is a mocked object):
+        If you want the viewModel to NOT be mocked but want it's dependencies to be mocked (eg repository)
+        (Where the 'repository' is a mocked object ie repository: CityRepository = mockk()) or
+        (Where repository = spyk(injectedRepository)) if you want to spy instead.
      */
-    @BindValue @JvmField
-    val viewModel:ListOfCitiesViewModel = ListOfCitiesViewModel(repository)
+    @BindValue
+    lateinit var viewModel:ListOfCitiesViewModel
+    // Note: The @BindValue we used above is just to tell hilt to replace the viewModel it would
+    // have injected for us with the one we created ourselves ie we are doing an overwrite.
 
     @Before
     fun setUp() {
-        // Populate @Inject fields in test class
+        // Populate @Inject fields in test class.
+        // This line is very important because every injected field will be null until it is called.
+        // For example, 'injectedRepository' variable will be null until hiltRule.inject() is called.
+        // This is why we put repository = spyk(injectedRepository) after hiltRule.inject().
         hiltRule.inject()
+
+        repository = spyk(injectedRepository)
+        viewModel = ListOfCitiesViewModel(repository)
     }
 
     @Test
@@ -142,5 +167,25 @@ class ListOfCitiesFragmentInstrumentedTest {
         assertEquals(longitude, 12.432f)
         assertEquals(cityName, "Lagos")
         assertEquals(countryName, "Nigeria")
+    }
+
+    /**
+     * This test is to ensure that we can use idling resource to wait for a long running task to
+     * complete and verify the result.
+     */
+    @Test
+    fun test_that_a_long_running_task_can_be_done_and_completed_successfully() {
+        every { repository.fetchAndCacheCities(any())} returns flow { emit(Result(UIStateType.SUCCESS, listOfCities)) }
+
+        launchFragmentInHiltContainer<ListOfCitiesFragment>()
+
+        // Verify the the progress bar for long running tasks is hidden
+        onView(withId(R.id.progressBarTwo)).check(matches(not(isDisplayed())))
+
+        // Click on the button
+        onView(withId(R.id.button)).perform(click())
+
+        // Check that the text on the button has changed to "Completed"
+        onView(withId(R.id.button)).check(matches(withText("Completed")))
     }
 }

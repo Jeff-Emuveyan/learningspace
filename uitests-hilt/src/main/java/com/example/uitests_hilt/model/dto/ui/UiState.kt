@@ -5,5 +5,5 @@ import com.example.uitests_hilt.model.entity.CityEntity
 import java.lang.Exception
 
 enum class UIStateType{
-    DEFAULT, NETWORK_ERROR, SUCCESS, NO_RESULT, LOADING, SEARCHING
+    DEFAULT, NETWORK_ERROR, SUCCESS, NO_RESULT, LOADING, LOADING_LONG_TASK, COMPLETED_LONG_TASK
 }

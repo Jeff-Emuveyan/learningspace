@@ -60,6 +60,10 @@ class ListOfCitiesFragment : Fragment() {
             setUpUI(it)
         }.flowWithLifecycle(lifecycle).launchIn(lifecycleScope)
 
+        listOfCitiesViewModel.longRunningTaskResult.onEach {
+            setUpUI(Result(UIStateType.COMPLETED_LONG_TASK, message = it))
+        }.flowWithLifecycle(lifecycle).launchIn(lifecycleScope)
+
         getCitiesByPageNumber()
     }
 
@@ -69,10 +73,9 @@ class ListOfCitiesFragment : Fragment() {
             UIStateType.SUCCESS -> { uiStateSuccess(result.cities) }
             UIStateType.NO_RESULT -> { uiStateNoResult() }
             UIStateType.NETWORK_ERROR -> { uiStateNetworkError() }
-            UIStateType.DEFAULT -> {
-                setUpRecyclerView()
-                setUpSearchView()
-            }
+            UIStateType.LOADING_LONG_TASK -> { uiStateLoadingLongRunningTask() }
+            UIStateType.COMPLETED_LONG_TASK -> { uiStateCompletedLongRunningTask(result.message) }
+            UIStateType.DEFAULT -> { uiStateDefault() }
         }
     }
 
@@ -108,6 +111,27 @@ class ListOfCitiesFragment : Fragment() {
             getCitiesByPageNumber(listOfCitiesViewModel.getNextPageNumber())
         }
         progressBar.visibility = View.INVISIBLE
+    }
+
+    private fun uiStateLoadingLongRunningTask() = with(binding) {
+        progressBarTwo.visibility = View.VISIBLE
+        button.visibility = View.INVISIBLE
+    }
+
+    private fun uiStateCompletedLongRunningTask(successMessage: String?) = with(binding) {
+        progressBarTwo.visibility = View.GONE
+        button.visibility = View.VISIBLE
+        button.text = successMessage ?: ""
+    }
+
+    private fun uiStateDefault() = with(binding) {
+        setUpRecyclerView()
+        setUpSearchView()
+        progressBarTwo.visibility = View.GONE
+        button.setOnClickListener {
+            uiStateLoadingLongRunningTask()
+            listOfCitiesViewModel.doLongRunningTask()
+        }
     }
 
     private fun getCitiesByPageNumber(pageNumber: Int = 1) =

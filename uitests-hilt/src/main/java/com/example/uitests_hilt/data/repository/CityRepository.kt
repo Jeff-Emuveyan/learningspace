@@ -12,8 +12,10 @@ import com.example.uitests_hilt.model.dto.Result
 import com.example.uitests_hilt.model.dto.ui.UIStateType.*
 import com.example.uitests_hilt.model.entity.CityEntity
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 open class CityRepository @Inject constructor (private val localDataSource: CityLocalDataSource,
@@ -97,5 +99,13 @@ open class CityRepository @Inject constructor (private val localDataSource: City
             }
         }
         return if (list.isNullOrEmpty()) Result(NETWORK_ERROR) else Result(SUCCESS, list)
+    }
+
+    /***
+     * This method exists for testing idling resource only.
+     */
+    suspend fun mimicALongRunningTask(): String = withContext(ioDispatcher) {
+        delay(5_000)
+        "Completed"
     }
 }

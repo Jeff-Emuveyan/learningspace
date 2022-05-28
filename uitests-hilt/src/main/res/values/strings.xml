@@ -11,4 +11,5 @@
     <string name="no_location_found_error">No location found for this particular city</string>
     <string name="msg_location">Country: %1$s, City: %2$s</string>
     <string name="app_name">uitests_hilt</string>
+    <string name="do_time_consuming_task">Do a time consuming task</string>
 </resources>

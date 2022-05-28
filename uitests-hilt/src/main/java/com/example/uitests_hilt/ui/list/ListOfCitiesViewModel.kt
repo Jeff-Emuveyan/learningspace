@@ -4,10 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.uitests_hilt.data.repository.CityRepository
 import com.example.uitests_hilt.model.dto.Query
-import com.example.uitests_hilt.model.dto.QueryType.*
 import com.example.uitests_hilt.model.dto.Result
 import com.example.uitests_hilt.model.dto.ui.UIStateType.*
-import com.example.uitests_hilt.model.entity.CityEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -20,6 +18,9 @@ class ListOfCitiesViewModel @Inject constructor(private val repository: CityRepo
 
     private val _uiState = MutableStateFlow(Result(DEFAULT))
     val uiState = _uiState.asStateFlow()
+
+    private val _longRunningTaskResult = MutableSharedFlow<String>()
+    val longRunningTaskResult = _longRunningTaskResult.asSharedFlow()
 
     fun getCities(query: Query) = viewModelScope.launch {
         if (_uiState.value.type == LOADING) return@launch
@@ -39,4 +40,9 @@ class ListOfCitiesViewModel @Inject constructor(private val repository: CityRepo
     }
 
     fun getNextPageNumber() = currentPageNumber + 1
+
+    fun doLongRunningTask() = viewModelScope.launch {
+        val result = repository.mimicALongRunningTask()
+        _longRunningTaskResult.emit(result)
+    }
 }
