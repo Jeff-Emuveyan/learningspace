@@ -1,51 +1,40 @@
 package com.example.uitests_hilt
 
-import android.util.Log
-import androidx.navigation.testing.TestNavHostController
-import androidx.recyclerview.widget.RecyclerView
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import com.example.uitests_hilt.data.repository.CityRepository
-import com.example.uitests_hilt.hilt.AppDatabaseModule
-import com.example.uitests_hilt.model.dto.Query
-import com.example.uitests_hilt.model.dto.QueryType
 import com.example.uitests_hilt.model.dto.Result
 import com.example.uitests_hilt.model.dto.ui.UIStateType
 import com.example.uitests_hilt.ui.list.CityItem
 import com.example.uitests_hilt.ui.list.ListOfCitiesFragment
 import com.example.uitests_hilt.ui.list.ListOfCitiesViewModel
+import com.example.uitests_hilt.util.idlingresource.EspressoIdlingResource
 import com.example.uitests_hilt.util.launchFragmentInHiltContainer
 import com.example.uitests_hilt.util.listOfCities
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.UninstallModules
-import io.mockk.coEvery
 import io.mockk.every
-import io.mockk.mockk
 import io.mockk.spyk
 import kotlinx.coroutines.flow.flow
 import org.hamcrest.Matchers.not
-import org.junit.Assert
 import org.junit.Assert.assertEquals
-import org.junit.Test
-import org.junit.runner.RunWith
 import org.junit.Before
 import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
 import javax.inject.Inject
 
 /***
  * I used mockk instead of mockito-android because mockito-android threw errors when I tried to mock
  * methods and it outright fell apart when I tried to dependency inject a mock by attaching @BindValue @JvmField
  */
-
 
 /***
  * Espresso test for RecyclerView can be found here:
@@ -65,7 +54,10 @@ class ListOfCitiesFragmentInstrumentedTest {
     lateinit var injectedRepository: CityRepository
 
     private lateinit var repository: CityRepository // We created this field because we want to spy
-    // the injectedRepository
+    // the injectedRepository.
+
+    @Inject
+    lateinit var espressoIdlingResource: EspressoIdlingResource
 
     /**
      * Most times, when launching a fragment for test, it is good to mock the viewModel.
@@ -110,7 +102,9 @@ class ListOfCitiesFragmentInstrumentedTest {
         hiltRule.inject()
 
         repository = spyk(injectedRepository)
-        viewModel = ListOfCitiesViewModel(repository)
+        viewModel = ListOfCitiesViewModel(espressoIdlingResource, repository)
+
+        IdlingRegistry.getInstance().register(espressoIdlingResource.idlingResource);
     }
 
     @Test

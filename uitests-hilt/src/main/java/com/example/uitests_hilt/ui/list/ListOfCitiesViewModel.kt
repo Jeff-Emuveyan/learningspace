@@ -6,13 +6,15 @@ import com.example.uitests_hilt.data.repository.CityRepository
 import com.example.uitests_hilt.model.dto.Query
 import com.example.uitests_hilt.model.dto.Result
 import com.example.uitests_hilt.model.dto.ui.UIStateType.*
+import com.example.uitests_hilt.util.idlingresource.EspressoIdlingResource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ListOfCitiesViewModel @Inject constructor(private val repository: CityRepository) : ViewModel() {
+class ListOfCitiesViewModel @Inject constructor(private val idlingResource: EspressoIdlingResource,
+                                                private val repository: CityRepository) : ViewModel() {
 
     private var currentPageNumber = 1
 
@@ -42,7 +44,9 @@ class ListOfCitiesViewModel @Inject constructor(private val repository: CityRepo
     fun getNextPageNumber() = currentPageNumber + 1
 
     fun doLongRunningTask() = viewModelScope.launch {
+        idlingResource.increment()
         val result = repository.mimicALongRunningTask()
+        idlingResource.decrement()
         _longRunningTaskResult.emit(result)
     }
 }
