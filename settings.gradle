@@ -4,3 +4,7 @@ include ':app'
 rootProject.name = "CarbonList"
 include ':uitests'
 include ':flows'
+include ':dagger'
+include ':dagger_dependency'
+include ':dagger_core'
+include ':uitests-hilt'
