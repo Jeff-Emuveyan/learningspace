@@ -1,5 +1,9 @@
 version: 2.1
 
+# Resources: https://github.com/CircleCI-Public/android-testing-circleci-examples/blob/main/.circleci/config.yml
+# and: https://circleci.com/blog/building-android-on-circleci/
+# and: https://circleci.com/developer/orbs/orb/circleci/android#commands-start-emulator
+
 orbs:
   android: circleci/android@1.0.3
   gcp-cli: circleci/gcp-cli@2.2.0
@@ -71,11 +75,11 @@ workflows:
   test-and-build:
     jobs:
       - unit-test
-      - android/run-ui-tests:
-          filters:
-            branches:
-              ignore: main # regular commits
-      - android-test:
+      - android-test: # Commits to any branch - skip matrix of devices
+        filters:
+          branches:
+            ignore: main
+      - android-test: # Commits to main branch only - run full matrix
           matrix:
             alias: android-test-all
             parameters:
