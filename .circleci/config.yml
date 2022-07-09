@@ -1,6 +1,6 @@
 version: 2.1
 
-# Resources: https://github.com/CircleCI-Public/android-testing-circleci-examples/blob/main/.circleci/config.yml
+# Resources: https://github.com/CircleCI-Public/android-testing-circleci-examples/blob/master/.circleci/config.yml
 # and: https://circleci.com/blog/building-android-on-circleci/
 # and: https://circleci.com/developer/orbs/orb/circleci/android#commands-start-emulator
 
@@ -66,7 +66,7 @@ jobs:
       - android/restore-build-cache
       - run:
           name: Assemble release build
-          command: |
+          command: | # Here we are building the release variant using assembleRelease
             ./gradlew assembleRelease
       - store_artifacts:
           path: app/build/outputs/apk/release/app-release-unsigned.apk
@@ -82,8 +82,8 @@ workflows:
       - android-test: # Commits to any branch - skip matrix of devices
         filters:
           branches:
-            ignore: main
-      - android-test: # Commits to main branch only - run full matrix
+            ignore: master
+      - android-test: # Commits to master branch only - run full matrix
           matrix:
             alias: android-test-all
             parameters:
@@ -99,11 +99,11 @@ workflows:
           name: android-test-<<matrix.system-image>>
           filters:
             branches:
-              only: main # Commits to main branch
+              only: master # Commits to master branch
       - release-build:
           requires:
             - unit-test
             - android-test-all
           filters:
             branches:
-              only: main # Commits to main branch
+              only: master # Commits to master branch
