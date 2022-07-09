@@ -71,6 +71,10 @@ jobs:
       - store_artifacts:
           path: app/build/outputs/apk/release/app-release-unsigned.apk
 
+# We created a workflow called test-and-build. When a commit it pushed, it will run all unit test
+# and instrumented test on that branch. When the master branch has been changed, it will run another
+# instrumented test on master but this time, it will run the instrumented tests on android 23 -> 30 commands:
+# there generate release build if all tests on master passes.
 workflows:
   test-and-build:
     jobs:
