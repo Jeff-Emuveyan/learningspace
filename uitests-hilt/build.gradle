@@ -41,10 +41,10 @@ android {
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.google.android.material:material:1.5.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     testImplementation 'junit:junit:4.13.2'
 
     // tests
@@ -54,9 +54,9 @@ dependencies {
     implementation 'androidx.test.espresso:espresso-idling-resource:3.4.0'
     androidTestImplementation 'androidx.test:runner:1.4.0'
     androidTestImplementation 'androidx.test:rules:1.4.0'
-    def fragment_version = "1.4.1"
+    def fragment_version = "1.5.0"
     debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
-    def nav_version = "2.4.2"
+    def nav_version = "2.5.0"
     androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
     // hilt test
     androidTestImplementation 'com.google.dagger:hilt-android-testing:2.38.1'
@@ -72,12 +72,12 @@ dependencies {
     api 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03'
 
     // navigation
-    api 'androidx.navigation:navigation-fragment-ktx:2.4.2'
-    api 'androidx.navigation:navigation-ui-ktx:2.4.2'
+    api 'androidx.navigation:navigation-fragment-ktx:2.5.0'
+    api 'androidx.navigation:navigation-ui-ktx:2.5.0'
 
     //Lifecycle scope
-    api "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
-    api 'androidx.fragment:fragment-ktx:1.4.0'
+    api "androidx.lifecycle:lifecycle-runtime-ktx:2.5.0"
+    api 'androidx.fragment:fragment-ktx:1.5.0'
 
     //Room
     api("androidx.room:room-runtime:$rootProject.roomVersion") {
@@ -92,24 +92,24 @@ dependencies {
     }
 
     //Lifecycle scope
-    api "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
+    api "androidx.lifecycle:lifecycle-runtime-ktx:2.5.0"
 
     // Coroutines
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
 
     api 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    api 'androidx.fragment:fragment-ktx:1.3.4'
+    api 'androidx.fragment:fragment-ktx:1.5.0'
 
     api 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
     //retrofit
     api 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation "com.squareup.okhttp3:okhttp:4.7.2"
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.7.2'
+    implementation "com.squareup.okhttp3:okhttp:4.9.3"
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
     implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
     //gson
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.code.gson:gson:2.8.9'
 
     // map
     api 'com.google.android.gms:play-services-maps:18.0.2'
