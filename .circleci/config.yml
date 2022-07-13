@@ -46,6 +46,15 @@ jobs:
           test-command: ./gradlew connectedDebugAndroidTest
           system-image: << parameters.system-image >>
       - run:
+          name: Wait for Emulator
+          no_output_timeout: 15m
+          command: |
+            # wait for it to have booted
+            circle-android wait-for-boot
+            # unlock the emulator screen
+            sleep 30
+            adb shell input keyevent 82
+      - run:
           name: Save test results
           command: |
             mkdir -p ~/test-results/junit/
