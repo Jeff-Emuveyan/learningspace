@@ -42,7 +42,8 @@ jobs:
       resource-class: xlarge
     steps:
       - checkout
-      - android/run-ui-tests:
+      - android/start-emulator-and-run-tests:
+          test-command: ./gradlew connectedDebugAndroidTest
           system-image: << parameters.system-image >>
       - run:
           name: Save test results
