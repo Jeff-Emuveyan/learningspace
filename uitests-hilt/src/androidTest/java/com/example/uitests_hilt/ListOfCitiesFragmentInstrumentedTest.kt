@@ -180,6 +180,6 @@ class ListOfCitiesFragmentInstrumentedTest {
         onView(withId(R.id.button)).perform(click())
 
         // Check that the text on the button has changed to "Completed"
-        onView(withId(R.id.button)).check(matches(withText("CompletedOOOOOO")))
+        onView(withId(R.id.button)).check(matches(withText("Completed")))
     }
 }
