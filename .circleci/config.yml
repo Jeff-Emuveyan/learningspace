@@ -32,14 +32,12 @@ jobs:
       - store_artifacts:
           path: ~/test-results/junit
 
-  run-ui-test-and-store-test-result:
+  store-ui-test-result:
     executor:
       name: android/android-machine
       resource-class: xlarge
     steps:
       - checkout
-      - android/run-ui-tests:
-          system-image: system-images;android-30;google_apis;x86
       - run:
           name: Save test results
           command: |
@@ -75,6 +73,10 @@ workflows:
     jobs:
       - unit-test
       - run-ui-test-and-store-test-result
+      - store-ui-test-result
+      - android/run-ui-tests:
+            system-image: system-images;android-30;google_apis;x86
+      - store-ui-test-result
       - release-build:
           requires:
             - unit-test
