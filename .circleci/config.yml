@@ -74,8 +74,7 @@ workflows:
   test-and-build:
     jobs:
       - unit-test
-      - android/run-ui-tests:
-          system-image: system-images;android-30;google_apis;x86
+      - run-ui-test-and-store-test-result
       - release-build:
           requires:
             - unit-test
