@@ -80,6 +80,3 @@ workflows:
           requires:
             - unit-test
             - android/run-ui-tests
-          filters:
-            branches:
-              only: master # Commits to master branch
