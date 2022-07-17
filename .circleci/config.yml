@@ -32,6 +32,23 @@ jobs:
       - store_artifacts:
           path: ~/test-results/junit
 
+  store-ui-test-result:
+    executor:
+      name: android/android-machine
+      resource-class: xlarge
+    steps:
+      - checkout
+      - run:
+          name: Save test results
+          command: |
+            mkdir -p ~/test-results/junit/
+            find . -type f -regex ".*/build/outputs/androidTest-results/.*xml" -exec cp {} ~/test-results/junit/ \;
+          when: always
+      - store_test_results:
+          path: ~/test-results
+      - store_artifacts:
+          path: ~/test-results/junit
+
   release-build:
     executor:
       name: android/android-machine
@@ -58,17 +75,9 @@ workflows:
       - android/run-ui-tests:
           system-image: system-images;android-30;google_apis;x86
           post-run-tests-steps:
-            - checkout
-            - run:
-                name: Save test results
-                command: |
-                  mkdir -p ~/test-results/junit/
-                  find . -type f -regex ".*/build/outputs/androidTest-results/.*xml" -exec cp {} ~/test-results/junit/ \;
-                when: always
-            - store_test_results:
-                path: ~/test-results
-            - store_artifacts:
-                path: ~/test-results/junit
+            - store-ui-test-result
+
+      - store-ui-test-result
       - release-build:
           requires:
             - unit-test
