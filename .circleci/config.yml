@@ -72,9 +72,20 @@ workflows:
   test-and-build:
     jobs:
       - unit-test
-      - store-ui-test-result
       - android/run-ui-tests:
-            system-image: system-images;android-30;google_apis;x86
+          system-image: system-images;android-30;google_apis;x86
+          post-run-tests-steps:
+            - checkout
+            - run:
+                name: Save test results
+                command: |
+                  mkdir -p ~/test-results/junit/
+                  find . -type f -regex ".*/build/outputs/androidTest-results/.*xml" -exec cp {} ~/test-results/junit/ \;
+                when: always
+            - store_test_results:
+                path: /test-results
+            - store_artifacts:
+                path: /test-results/junit
       - store-ui-test-result
       - release-build:
           requires:
