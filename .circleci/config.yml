@@ -1,36 +1,84 @@
 version: 2.1
 
-# Resources: https://github.com/CircleCI-Public/android-testing-circleci-examples/blob/master/.circleci/config.yml
-# and: https://circleci.com/blog/building-android-on-circleci/
+# Resources: https://circleci.com/blog/building-android-on-circleci/
 # and: https://circleci.com/developer/orbs/orb/circleci/android#commands-start-emulator
+
+# The config.yml of Circleci is like a functional programming script that contains methods (called jobs)
+# and a main method (called workflows) where these jobs are listed in the order they are to run.
+# When you push a branch to CircleCI, CircleCi will go to the workflows section and run each job one
+# after the other.
+
+# A job is like a method. It is a set of commands you want CircleCi to run for you.
+# Inside the job's code, you must have a section called *steps*. In this *steps* section, you will list all
+# the commands that you want the job to contain.
+# Now, there are some default-pre-written commands CircleCi has that makes things easy for you. You
+# can simply copy-paste them. See the list of all inbuilt-pre-written commands (at the left side on the menu):
+# https://circleci.com/developer/orbs/orb/circleci/android#usage-run-ui-tests-job
+
+# Alternatively, if you want to write your own custom command, you will need to use a *run* command
+# block (demonstrated in the examples below)
 
 orbs:
   android: circleci/android@1.0.3
   gcp-cli: circleci/gcp-cli@2.2.0
 
 jobs:
-  unit-test:
+  unit-test: # A job to run unit test (Note: The name of the job can be anything you want it to be)
     executor:
       name: android/android-machine
       resource-class: xlarge
-    steps:
-      - checkout
-      - android/restore-gradle-cache
-      - android/restore-build-cache
-      - android/run-tests:
-          test-command: ./gradlew testDebug
-      - android/save-gradle-cache
-      - android/save-build-cache
-      - run:
+    steps: # The steps block where we list the commands we want CircleCi to run when this job is called.
+      - checkout # an inbuilt-pre-written command
+      - android/restore-gradle-cache # an inbuilt-pre-written command
+      - android/restore-build-cache # an inbuilt-pre-written command
+      - android/run-tests: # an inbuilt-pre-written command
+          test-command: ./gradlew testDebug # setting a parameter on this command
+      - android/save-gradle-cache # an inbuilt-pre-written command
+      - android/save-build-cache # an inbuilt-pre-written command
+      - run: # a command that allows us write our own custom command. We are writing a custom command
+          # to copy the unit tests results from the default path to a path were we want to display them.
           name: Save test results
           command: |
             mkdir -p ~/test-results/junit/
             find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/test-results/junit/ \;
           when: always
+      - store_test_results: # an inbuilt-pre-written command
+          path: ~/test-results
+      - store_artifacts: # an inbuilt-pre-written command
+          path: ~/test-results/junit
+
+
+  instrumentation-test: # A job to run instrumentation tests
+    executor:
+      name: android/android-machine
+      resource-class: xlarge
+    steps:
+      - checkout
+      - android/start-emulator-and-run-tests: # an inbuilt-pre-written command to start the emulator and run instrumentation tests
+          test-command: ./gradlew connectedDebugAndroidTest
+          system-image: system-images;android-30;google_apis;x86 # We want to use an android 10 emulator.
+      - run:  # a command that allows us write our own custom command. We are writing a custom command
+          # to copy the instrumentation tests results from the default path to a path were we want to display them.
+          name: Save test results
+          command: |
+            mkdir -p ~/test-results/junit/
+            find . -type f -regex ".*/build/outputs/androidTest-results/.*xml" -exec cp {} ~/test-results/junit/ \;
+          when: always
       - store_test_results:
           path: ~/test-results
       - store_artifacts:
           path: ~/test-results/junit
+
+  # Note that the code above will work ONLY for instrumentation tests that don't contain any UI test (Espresso)
+  # If you run to test an Espresso test for example, all the test cases will fail.
+  # So if you know your code base does not contain any UI instrumentation test (Espresso), you can use it. Else use the
+  # in-built android/run-ui-tests job:
+  # https://circleci.com/developer/orbs/orb/circleci/android#usage-run-ui-tests-job
+  # the in the documentation, android/run-ui-tests job wraps the android/start-emulator-and-run-tests command
+  # this means that we shouldn't even be using android/start-emulator-and-run-tests command. Just use the
+  # in-built run-ui-tests job to run UI/Instrumentation tests.
+  # This is why we didn't call instrumentation-test in the workflow block. We used run-ui-tests job.
+
 
   release-build:
     executor:
