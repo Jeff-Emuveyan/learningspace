@@ -120,6 +120,9 @@ workflows:
           # You don't need to write the steps for inbuilt jobs. They have already been written for you.
 
           # The android/run-ui-tests has some parameters:
+          executor:
+            name: android/android-machine
+            resource-class: xlarge
           system-image: system-images;android-29;google_apis;x86 # Use Android 10 emulator.
           post-run-tests-steps: # A parameter that allows you lists steps you want to perform after the run-ui-tests has finished.
             # We want to display the UI/Instrumentation tests results. So we perform the following steps:
@@ -140,6 +143,9 @@ workflows:
 
       # We need another UI test job for commits to our master branch. We will make this job run on multiple devices (Android 8 -12):
       - android/run-ui-tests:
+          executor:
+            name: android/android-machine
+            resource-class: xlarge
           matrix:
             alias: ui_test_on_multiple_devices
             parameters:
