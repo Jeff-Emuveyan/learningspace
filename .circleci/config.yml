@@ -138,7 +138,7 @@ workflows:
             branches:
               ignore: master
 
-      # We need another ui test job for commits to our master branch. We will make this job run on multiple devices (Android 8 -12):
+      # We need another UI test job for commits to our master branch. We will make this job run on multiple devices (Android 8 -12):
       - android/run-ui-tests:
           matrix:
             alias: ui_test_on_multiple_devices
