@@ -56,7 +56,7 @@ jobs:
       - checkout
       - android/start-emulator-and-run-tests: # an inbuilt-pre-written command to start the emulator and run instrumentation tests
           test-command: ./gradlew connectedDebugAndroidTest
-          system-image: system-images;android-30;google_apis;x86 # We want to use an android 10 emulator.
+          system-image: system-images;android-29;google_apis;x86 # We want to use an android 10 emulator.
       - run:  # a command that allows us write our own custom command. We are writing a custom command
           # to copy the instrumentation tests results from the default path to a path were we want to display them.
           name: Save test results
@@ -70,14 +70,14 @@ jobs:
           path: ~/test-results/junit
 
   # Note that the code above will work ONLY for instrumentation tests that don't contain any UI test (Espresso)
-  # If you run to test an Espresso test for example, all the test cases will fail.
+  # If you want to test an Espresso test for example, all the test cases will fail.
   # So if you know your code base does not contain any UI instrumentation test (Espresso), you can use it. Else use the
   # in-built android/run-ui-tests job:
   # https://circleci.com/developer/orbs/orb/circleci/android#usage-run-ui-tests-job
   # the in the documentation, android/run-ui-tests job wraps the android/start-emulator-and-run-tests command
   # this means that we shouldn't even be using android/start-emulator-and-run-tests command. Just use the
-  # in-built run-ui-tests job to run UI/Instrumentation tests.
-  # This is why we didn't call instrumentation-test in the workflow block. We used run-ui-tests job.
+  # in-built run-ui-tests job to run UI and Instrumentation tests too. It is capable of doing both.
+  # This is why we didn't call this our instrumentation-test job in the workflow block. We used run-ui-tests job.
 
 
   release-build:
@@ -95,19 +95,32 @@ jobs:
       - store_artifacts:
           path: app/build/outputs/apk/release/app-release-unsigned.apk
 
-# We created a workflow called test-and-build. When a commit it pushed, it will run all unit test
-# and instrumented test on that branch. When the master branch has been changed, it will run another
-# instrumented test on master but this time, it will run the instrumented tests on android 23 -> 30 commands:
-# there generate release build if all tests on master passes.
+# We created a workflow called test-and-build.
+# When you push a commit, our work flow will trigger and these are the job that will run on that branch:
+# 1) We will run unit tests
+# 2) We will run UI tests on Android version 11 only, for now, so that we don't spend to much time on UI testing.
+# This is ok for any other branch apart from master branch. On master branch, we will like to test on all devices commands:
+
+# 3) We will run UI tests on Android 7 - 12 (ie Api 24 -32), ONLY if the branch is the *master* branch
+# 4) We will create a release build, ONLY if the branch is the *master* branch
+
+# DO READ UP THIS PAGE IN THE LINK BELOW BECAUSE THAT IS WHERE WE GO ALL OF THE INFORMATION WE ARE USING:
+# https://circleci.com/blog/building-android-on-circleci/
+
 workflows:
   test-and-build:
     jobs:
       - unit-test
-      - android/run-ui-tests:
-          system-image: system-images;android-30;google_apis;x86
-          post-run-tests-steps:
+      # - instrumentation-test  We comment out the instrumentation test job because it will always fail UI tests. We don't need it.
+      - android/run-ui-tests: # Now we call the inbuilt job to run ui tests. Because it is inbuilt, we need to drop it here in the workflow.
+          # You don't need to write the steps for inbuilt jobs. They have already been written for you.
+
+          # The android/run-ui-tests has some parameters:
+          system-image: system-images;android-29;google_apis;x86 # Use Android 10 emulator.
+          post-run-tests-steps: # A parameter that allows you lists steps you want to perform after the run-ui-tests has finished.
+            # We want to display the UI/Instrumentation tests results. So we perform the following steps:
             - checkout
-            - run:
+            - run: # We use the run command to create a custom 'command' to copy tests results from the default path to a path were we want to display them.
                 name: Save test results
                 command: |
                   mkdir -p ~/test-results/junit/
@@ -117,7 +130,47 @@ workflows:
                 path: ~/test-results
             - store_artifacts:
                 path: ~/test-results/junit
-      - release-build:
+          filters: # We use the filters key to specify that this job should NOT run on the master branch
+            branches:
+              ignore: master
+
+      # We need another ui test job for commits to our master branch. We will make this job run on multiple devices (Android 8 -12):
+      - android/run-ui-tests:
+          matrix:
+            alias: ui_test_on_multiple_devices
+            parameters:
+              system-image:
+                - system-images;android-32;google_apis;x86
+                - system-images;android-31;google_apis;x86
+                - system-images;android-30;google_apis;x86
+                - system-images;android-29;google_apis;x86
+                - system-images;android-28;google_apis;x86
+                - system-images;android-27;google_apis;x86
+                - system-images;android-26;google_apis;x86
+          system-image: << parameters.system-image >> # This tells CircleCi to loop through the matrix of system images and run the UI/Instrumentation tests on them.
+            post-run-tests-steps: # A parameter that allows you lists steps you want to perform after the run-ui-tests has finished.
+              # We want to display the UI/Instrumentation tests results. So we perform the following steps:
+              - checkout
+              - run: # We use the run command to create a custom 'command' to copy tests results from the default path to a path were we want to display them.
+              name: Save test results
+              command: |
+                mkdir -p ~/test-results/junit/
+                find . -type f -regex ".*/build/outputs/androidTest-results/.*xml" -exec cp {} ~/test-results/junit/ \;
+              when: always
+                - store_test_results:
+                    path: ~/test-results
+                - store_artifacts:
+                    path: ~/test-results/junit
+          filters:
+            branches:
+              only: main
+
+      - release-build: # The release-build job requires that the unit-test and run-ui-tests
+          # (CircleCi will figure out which of the run-ui-tests we are referring to here) run successfully before it starts,
+          # and it will only start if it is the master branch.
           requires:
             - unit-test
             - android/run-ui-tests
+          filters:
+            branches:
+              only: main
