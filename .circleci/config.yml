@@ -148,19 +148,19 @@ workflows:
                 - system-images;android-27;google_apis;x86
                 - system-images;android-26;google_apis;x86
           system-image: << parameters.system-image >> # This tells CircleCi to loop through the matrix of system images and run the UI/Instrumentation tests on them.
-            post-run-tests-steps: # A parameter that allows you lists steps you want to perform after the run-ui-tests has finished.
-              # We want to display the UI/Instrumentation tests results. So we perform the following steps:
-              - checkout
-              - run: # We use the run command to create a custom 'command' to copy tests results from the default path to a path were we want to display them.
-              name: Save test results
-              command: |
-                mkdir -p ~/test-results/junit/
-                find . -type f -regex ".*/build/outputs/androidTest-results/.*xml" -exec cp {} ~/test-results/junit/ \;
-              when: always
-                - store_test_results:
-                    path: ~/test-results
-                - store_artifacts:
-                    path: ~/test-results/junit
+          post-run-tests-steps: # A parameter that allows you lists steps you want to perform after the run-ui-tests has finished.
+            # We want to display the UI/Instrumentation tests results. So we perform the following steps:
+            - checkout
+            - run: # We use the run command to create a custom 'command' to copy tests results from the default path to a path were we want to display them.
+            name: Save test results
+            command: |
+              mkdir -p ~/test-results/junit/
+              find . -type f -regex ".*/build/outputs/androidTest-results/.*xml" -exec cp {} ~/test-results/junit/ \;
+            when: always
+              - store_test_results:
+                  path: ~/test-results
+              - store_artifacts:
+                  path: ~/test-results/junit
           filters:
             branches:
               only: main
