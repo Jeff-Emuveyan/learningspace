@@ -166,7 +166,7 @@ workflows:
                 path: ~/test-results/junit
           filters:
             branches:
-              only: main
+              only: master
 
       - release-build: # The release-build job requires that the unit-test and run-ui-tests
           # (CircleCi will figure out which of the run-ui-tests we are referring to here) run successfully before it starts,
@@ -176,4 +176,4 @@ workflows:
             - android/run-ui-tests
           filters:
             branches:
-              only: main
+              only: master
