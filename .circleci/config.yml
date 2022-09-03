@@ -80,6 +80,9 @@ jobs:
   # This is why we didn't call this our instrumentation-test job in the workflow block. We used run-ui-tests job.
 
 
+  # The duty of this job is to create a release variant build type.
+  # The build we will generate will be an un-signed apk. This is ok. To generate a signed apk to be released,
+  # it is better to use fastlane because the process of generating signed apk using circle ci is a bit complex.
   release-build:
     executor:
       name: android/android-machine
@@ -90,7 +93,7 @@ jobs:
       - android/restore-build-cache
       - run:
           name: Assemble release build
-          command: | # Here we are building the release variant using assembleRelease
+          command: | # Here we are building the release variant using assembleRelease gradle instruction.
             ./gradlew assembleRelease
       - store_artifacts:
           path: app/build/outputs/apk/release/app-release-unsigned.apk
