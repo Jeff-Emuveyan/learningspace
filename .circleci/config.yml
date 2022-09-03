@@ -144,8 +144,8 @@ workflows:
             alias: ui_test_on_multiple_devices
             parameters:
               system-image:
-                - system-images;android-32;google_apis;86_64
-                - system-images;android-31;google_apis;86_64
+                - system-images;android-32;google_apis;x86_64
+                - system-images;android-31;google_apis;x86_64
                 - system-images;android-30;google_apis;x86
                 - system-images;android-29;google_apis;x86
                 - system-images;android-28;google_apis;x86
