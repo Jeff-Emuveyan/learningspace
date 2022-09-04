@@ -141,7 +141,7 @@ workflows:
             branches:
               ignore: master
 
-      # We need another UI test job for commits to our master branch. We will make this job run on multiple devices (Android 8 -12):
+      # We need another UI test job for commits to our master branch. We will make this job run on multiple devices (Android 8 -11):
       - android/run-ui-tests:
           executor:
             name: android/android-machine
@@ -150,9 +150,10 @@ workflows:
             alias: ui_test_on_multiple_devices
             parameters:
               system-image:
-                - system-images;android-32;google_apis;x86_64
-                - system-images;android-31;google_apis;x86_64
                 - system-images;android-30;google_apis;x86
+                - system-images;android-29;google_apis;x86
+                - system-images;android-28;google_apis;x86
+                - system-images;android-27;google_apis;x86
                 - system-images;android-26;google_apis;x86
           system-image: << matrix.system-image >> # This tells CircleCi to loop through the matrix of system images and run the UI/Instrumentation tests on them.
           post-run-tests-steps: # A parameter that allows you lists steps you want to perform after the run-ui-tests has finished.
