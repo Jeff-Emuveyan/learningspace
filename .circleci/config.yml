@@ -27,7 +27,7 @@ jobs:
   unit-test: # A job to run unit test (Note: The name of the job can be anything you want it to be)
     executor:
       name: android/android-machine
-      resource-class: xlarge
+      resource-class: large # Makes the build faster. For our free plan, large is what we are allowed to use else the build may fail.
     steps: # The steps block where we list the commands we want CircleCi to run when this job is called.
       - checkout # an inbuilt-pre-written command
       - android/restore-gradle-cache # an inbuilt-pre-written command
@@ -52,7 +52,7 @@ jobs:
   instrumentation-test: # A job to run instrumentation tests
     executor:
       name: android/android-machine
-      resource-class: xlarge
+      resource-class: large
     steps:
       - checkout
       - android/start-emulator-and-run-tests: # an inbuilt-pre-written command to start the emulator and run instrumentation tests
@@ -87,7 +87,7 @@ jobs:
   release-build:
     executor:
       name: android/android-machine
-      resource-class: xlarge
+      resource-class: large
     steps:
       - checkout
       - android/restore-gradle-cache
@@ -122,7 +122,7 @@ workflows:
           # The android/run-ui-tests has some parameters:
           executor:
             name: android/android-machine
-            resource-class: xlarge
+            resource-class: large
           system-image: system-images;android-29;google_apis;x86 # Use Android 10 emulator.
           post-run-tests-steps: # A parameter that allows you lists steps you want to perform after the run-ui-tests has finished.
             # We want to display the UI/Instrumentation tests results. So we perform the following steps:
@@ -145,7 +145,7 @@ workflows:
       - android/run-ui-tests:
           executor:
             name: android/android-machine
-            resource-class: xlarge
+            resource-class: large
           matrix:
             alias: ui_test_on_multiple_devices
             parameters:
