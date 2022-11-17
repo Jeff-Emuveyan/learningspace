@@ -56,6 +56,7 @@ class UsersFragment : Fragment() {
 
         fetchEmployees()
         fetchGifts()
+        stateIn()
         observeFlow()
     }
 
@@ -143,6 +144,20 @@ class UsersFragment : Fragment() {
         val name = binding.etName.text.toString()
         val age = binding.editTextNumber.text?.toString()?.toInt() ?: 0
         viewModel.save(UserEntity(firstName = name, age = age))
+    }
+
+    /**
+     * Here, we are simply testing to see if we can convert an ordinary cold flow to a state flow using the
+     * stateIn function.
+     */
+    private fun stateIn() {
+        viewModel.streamOfWords.onEach {
+            // Because we used stateIn, the cold flow will be convert to a state flow and this block
+            // will then be called only once instead of several times.
+            // Note: If we put a delay of say 3 seconds BEFORE (not after) emitting the string, the flow
+            // will then emit the initialValue you passed to the stateIn before it will begin emitting the string as expected.
+            Log.e("stateIn", it)
+        }.flowWithLifecycle(lifecycle).launchIn(lifecycleScope)
     }
 
 }
